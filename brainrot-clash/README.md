@@ -1,5 +1,7 @@
 # Brainrot Clash — prototype 4
 
+![Brainrot Clash](apercu.jpg)
+
 Le prototype 3 (« Clash au Récif »), avec deux brainrots à la place des persos manga :
 **Ballerina Cappuccina**, danseuse rapide et légère à tête de tasse de cappuccino, et
 **Tung Tung Tung Sahur**, une bûche lente et lourde armée d'une batte. Même moteur, même

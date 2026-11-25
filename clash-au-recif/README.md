@@ -1,5 +1,7 @@
 # Clash au Récif — prototype 3
 
+![Clash au Récif](apercu.jpg)
+
 Un versus fighting façon Super Smash Bros, en 3D avec un rendu manga (Three.js, cel shading).
 Deux persos originaux s'affrontent sur un récif en pleine mer : Rin, rapide et légère, et
 Ganzo, lent et lourd. On joue contre un bot (3 niveaux) ou à deux sur le même clavier.

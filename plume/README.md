@@ -1,5 +1,7 @@
 # Plume — prototype 2
 
+![Plume](apercu.jpg)
+
 Un plateformer en pixel art, sans moteur de jeu : TypeScript et Canvas 2D. Plume, un petit
 oiseau qui ne sait pas voler, traverse la forêt jusqu'à son nid.
 

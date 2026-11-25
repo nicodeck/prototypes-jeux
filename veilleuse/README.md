@@ -1,5 +1,7 @@
 # Veilleuse — prototype 5
 
+![Veilleuse](apercu.jpg)
+
 Une traversée contemplative dans l'esprit de Hollow Knight, en 2D avec WebGL (Three.js). On y
 incarne Veilleuse, une petite silhouette encapuchonnée qui porte une lanterne. Elle descend dans
 une mine engloutie et éteinte, rallume les lanternes en chemin, jusqu'au Cœur, un grand cristal

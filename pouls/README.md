@@ -1,5 +1,7 @@
 # Pouls — prototype 11
 
+![Pouls](apercu.jpg)
+
 Un jeu de rythme-action en 2D. Brin, un petit esprit-graine au cœur lumineux, court à travers une jungle
 bioluminescente, de nuit, vers l'Arbre-Cœur qui bat à l'horizon. Tout bat au rythme d'une musique générée
 par le code : les ronces, les rôdeurs et les lianes arrivent sur les temps, et chaque geste réussi joue

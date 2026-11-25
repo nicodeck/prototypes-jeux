@@ -1,5 +1,7 @@
 # Rallye du Récif — prototype 6
 
+![Rallye du Récif](apercu.jpg)
+
 Une course de karts dans l'esprit de Mario Kart, en 3D avec un rendu manga (Three.js, cel shading).
 Huit karts font trois tours d'une île tropicale : une ligne droite sur la plage, une montée vers le
 phare, une épingle, une descente avec un tremplin, un pont au-dessus de la passe et une grande anse,

@@ -1,5 +1,7 @@
 # Phares — prototype 10
 
+![Phares](apercu.jpg)
+
 De nuit, en pleine tempête, on barre L'Étincelle, un petit voilier, entre les récifs d'un archipel pour
 rallumer un à un cinq phares éteints. Chaque feu rallumé calme la mer autour de lui, refait le plein
 d'huile de la lanterne et répare la coque. Quand les six feux brûlent, la tempête se retire et le jour se lève.

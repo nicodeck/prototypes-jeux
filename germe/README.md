@@ -1,5 +1,7 @@
 # Germe — prototype 12
 
+![Germe](apercu.jpg)
+
 Une toute petite planète, morte et grise. On y joue un petit être au galet crème, une pousse sur la tête,
 une écharpe corail. On marche tout autour de la sphère (la gravité tire vers le centre) pour la faire revivre :
 pousser la pierre qui bouche la première source, ramasser les graines lumineuses, les planter dans la terre

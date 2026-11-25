@@ -1,5 +1,7 @@
 # Aurea — prototype 7
 
+![Aurea](apercu.jpg)
+
 Un city builder dans l'esprit d'Anno 117 : Pax Romana, en 3D avec Three.js. On fonde une cité
 romaine sur une île de Méditerranée, vers 117 apr. J.-C. Au départ, il y a un petit bourg au fond
 d'une baie, avec un port, un forum, une pêcherie et un vieil aqueduc. On le fait grandir
