@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Veilleuse</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/ui/style.css" />
+  </head>
+  <body>
+    <canvas id="ecran"></canvas>
+    <div id="ui">
+      <div id="titre">
+        <h1>Veilleuse</h1>
+        <p class="sous">une descente dans la mine engloutie</p>
+        <p class="invite">appuie sur une touche</p>
+      </div>
+      <div id="zone"><div class="orne"></div><h2></h2><p></p><div class="orne bas"></div></div>
+      <div id="lanternes"></div>
+      <div id="aide">← → marcher · <b>Espace</b> sauter (plus longtemps : plus haut) · contre une paroi, saute encore · <b>↓</b> descendre d'une planche</div>
+      <div id="pause">
+        <h2>Pause</h2>
+        <p>← → marcher · Espace, ↑ ou Z sauter · ↓ descendre d'une planche ou plonger</p>
+        <p>Contre une paroi, en l'air : appuie vers elle pour glisser, et saute pour rebondir.</p>
+        <p>Dans l'eau : Espace pour nager vers le haut, ↓ pour plonger.</p>
+        <p class="petit">Échap reprendre · M couper le son</p>
+      </div>
+      <div id="fin">
+        <p class="l1">Le Cœur bat de nouveau.</p>
+        <p class="l2">Dans toute la mine, la lumière remonte les galeries.</p>
+        <p class="l3"></p>
+        <h1 class="l4">Veilleuse</h1>
+        <p class="l5">merci d'avoir veillé</p>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

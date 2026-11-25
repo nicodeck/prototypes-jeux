@@ -1,0 +1,746 @@
+/* Aurea : une interface discrète, en verre fumé, liserés d'or et capitales romaines. */
+:root {
+  --or: #d7b46a;
+  --or-clair: #f1dca4;
+  --or-sombre: #8a6a32;
+  --encre: #f6eedd;
+  --encre-douce: rgba(246, 238, 221, 0.68);
+  --verre: rgba(22, 17, 12, 0.55);
+  --verre-fort: rgba(18, 13, 9, 0.78);
+  --trait: rgba(215, 180, 106, 0.38);
+  --rouge: #e0705a;
+  --vert: #a7c97b;
+  --titre: "Cinzel", "Trajan Pro", serif;
+  --texte: "Cormorant Garamond", "Garamond", serif;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  font-family: var(--texte);
+  color: var(--encre);
+  user-select: none;
+  -webkit-user-select: none;
+}
+canvas {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+}
+#ui {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  transition: opacity 1.2s ease;
+}
+#ui.cache {
+  opacity: 0;
+}
+#ui.cache * {
+  pointer-events: none !important;
+}
+.panneau {
+  pointer-events: auto;
+  background: var(--verre);
+  backdrop-filter: blur(10px) saturate(1.15);
+  -webkit-backdrop-filter: blur(10px) saturate(1.15);
+  border: 1px solid var(--trait);
+  border-radius: 3px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 230, 170, 0.08);
+}
+svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+/* --- La barre du haut : la cité et ses ressources --- */
+#haut {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  padding: 0;
+}
+#blason {
+  padding: 8px 16px 8px 14px;
+  border-right: 1px solid var(--trait);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+#blason .nom {
+  font-family: var(--titre);
+  font-size: 20px;
+  letter-spacing: 0.3em;
+  color: var(--or-clair);
+  line-height: 1;
+}
+#blason .ere {
+  font-family: var(--titre);
+  font-size: 9.5px;
+  letter-spacing: 0.22em;
+  color: var(--encre-douce);
+  margin-top: 5px;
+  text-transform: uppercase;
+}
+.ressources {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 10px;
+}
+.res {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 2px;
+  font-size: 17px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  position: relative;
+  cursor: default;
+  min-width: 34px;
+}
+.res svg {
+  color: var(--or);
+  width: 19px;
+  height: 19px;
+}
+.res .delta {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--vert);
+  margin-left: -2px;
+}
+.res .delta.neg {
+  color: var(--rouge);
+}
+.res.manque {
+  background: rgba(224, 112, 90, 0.18);
+}
+.res.manque svg {
+  color: var(--rouge);
+}
+.res.cache {
+  display: none;
+}
+.sep {
+  width: 1px;
+  align-self: stretch;
+  background: var(--trait);
+  margin: 4px 6px;
+}
+.paliers {
+  display: flex;
+  gap: 10px;
+  padding: 0 10px;
+}
+.palier {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  font-size: 17px;
+  font-weight: 600;
+}
+.palier small {
+  font-family: var(--titre);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  color: var(--encre-douce);
+  font-weight: 400;
+}
+.palier.verrou {
+  opacity: 0.35;
+}
+
+/* --- Le cadran : l'heure, le temps, la vitesse --- */
+#cadran {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px 7px 12px;
+}
+#cadran .heure {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 92px;
+}
+#cadran .romaine {
+  font-family: var(--titre);
+  font-size: 14px;
+  letter-spacing: 0.14em;
+  color: var(--or-clair);
+}
+#cadran .jour {
+  font-size: 13px;
+  color: var(--encre-douce);
+  font-style: italic;
+}
+#disque {
+  width: 44px;
+  height: 44px;
+  position: relative;
+}
+#meteo {
+  cursor: pointer;
+  color: var(--or);
+  padding: 4px;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+#meteo:hover {
+  background: rgba(215, 180, 106, 0.15);
+}
+#meteo svg {
+  width: 24px;
+  height: 24px;
+}
+.boutons {
+  display: flex;
+  gap: 2px;
+}
+.bouton {
+  pointer-events: auto;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--encre);
+  font-family: var(--titre);
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  padding: 5px 7px;
+  border-radius: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.bouton:hover {
+  background: rgba(215, 180, 106, 0.14);
+}
+.bouton.actif {
+  border-color: var(--or);
+  color: var(--or-clair);
+  background: rgba(215, 180, 106, 0.12);
+}
+
+/* --- La barre de construction --- */
+#construire {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#onglets {
+  display: flex;
+  gap: 4px;
+  margin-bottom: -1px;
+  pointer-events: auto;
+}
+.onglet {
+  font-family: var(--titre);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 7px 14px 6px;
+  background: var(--verre-fort);
+  border: 1px solid var(--trait);
+  border-bottom: none;
+  border-radius: 3px 3px 0 0;
+  color: var(--encre-douce);
+  cursor: pointer;
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+.onglet svg {
+  width: 15px;
+  height: 15px;
+  color: var(--or);
+}
+.onglet.actif {
+  color: var(--or-clair);
+  background: var(--verre);
+}
+#cartes {
+  display: flex;
+  gap: 6px;
+  padding: 8px;
+  min-height: 92px;
+}
+.carte {
+  width: 112px;
+  padding: 9px 8px 7px;
+  border: 1px solid rgba(215, 180, 106, 0.2);
+  border-radius: 2px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  position: relative;
+  background: linear-gradient(180deg, rgba(255, 235, 190, 0.04), rgba(0, 0, 0, 0.12));
+  transition: border-color 0.15s, background 0.15s, transform 0.15s;
+}
+.carte:hover {
+  border-color: var(--or);
+  transform: translateY(-2px);
+}
+.carte.actif {
+  border-color: var(--or-clair);
+  background: linear-gradient(180deg, rgba(215, 180, 106, 0.22), rgba(215, 180, 106, 0.05));
+}
+.carte.verrou {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+.carte.cher .cout {
+  color: var(--rouge);
+}
+.carte .latin {
+  font-family: var(--titre);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--or-clair);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.carte .fr {
+  font-size: 14px;
+  font-style: italic;
+  color: var(--encre-douce);
+  line-height: 1.05;
+  min-height: 30px;
+}
+.carte .cout {
+  display: flex;
+  gap: 7px;
+  font-size: 13.5px;
+  font-weight: 600;
+  align-items: center;
+}
+.carte .cout span {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.carte .cout svg {
+  width: 13px;
+  height: 13px;
+  color: var(--or);
+}
+.carte .touche {
+  position: absolute;
+  top: 5px;
+  right: 6px;
+  font-family: var(--titre);
+  font-size: 9px;
+  color: var(--encre-douce);
+  opacity: 0.7;
+}
+.carte .cadenas {
+  font-size: 11.5px;
+  font-style: italic;
+  color: var(--or);
+}
+
+/* --- L'infobulle --- */
+#bulle {
+  position: absolute;
+  max-width: 300px;
+  padding: 11px 14px;
+  font-size: 15.5px;
+  line-height: 1.3;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 5;
+  pointer-events: none !important;
+}
+#bulle.visible {
+  opacity: 1;
+}
+#bulle h3 {
+  margin: 0 0 4px;
+  font-family: var(--titre);
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  color: var(--or-clair);
+}
+#bulle .ligne {
+  color: var(--encre-douce);
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+/* --- La fiche du bâtiment choisi --- */
+#fiche {
+  position: absolute;
+  right: 14px;
+  top: 84px;
+  width: 270px;
+  padding: 14px 16px 12px;
+  opacity: 0;
+  transform: translateX(16px);
+  transition: opacity 0.25s, transform 0.25s;
+  pointer-events: none;
+}
+#fiche.visible {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+#fiche h2 {
+  margin: 0;
+  font-family: var(--titre);
+  font-weight: 500;
+  font-size: 17px;
+  letter-spacing: 0.12em;
+  color: var(--or-clair);
+}
+#fiche .sous {
+  font-style: italic;
+  color: var(--encre-douce);
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+#fiche .desc {
+  font-size: 15px;
+  line-height: 1.3;
+  margin: 6px 0 10px;
+}
+#fiche .besoins {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 10px;
+  margin: 6px 0;
+}
+.besoin {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+}
+.besoin svg {
+  width: 16px;
+  height: 16px;
+  color: var(--vert);
+}
+.besoin.non svg {
+  color: var(--rouge);
+}
+.besoin.non {
+  color: #f2b3a5;
+}
+.jauge {
+  height: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 4px 0 8px;
+}
+.jauge div {
+  height: 100%;
+  background: linear-gradient(90deg, var(--or-sombre), var(--or-clair));
+  transition: width 0.4s;
+}
+#fiche .etat {
+  font-size: 14.5px;
+  color: var(--encre-douce);
+  font-style: italic;
+}
+#fiche .etat.alerte {
+  color: #f2b3a5;
+}
+
+/* --- La chronique --- */
+#chronique {
+  position: absolute;
+  left: 18px;
+  bottom: 18px;
+  width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  pointer-events: none;
+}
+.nouvelle {
+  font-size: 16px;
+  font-style: italic;
+  line-height: 1.25;
+  color: var(--encre);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 14px rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  transform: translateY(8px);
+  animation: arrivee 0.8s ease forwards;
+  transition: opacity 2s;
+}
+.nouvelle.i1 {
+  color: var(--or-clair);
+}
+.nouvelle.i2 {
+  color: var(--or-clair);
+  font-style: normal;
+  font-weight: 600;
+}
+.nouvelle.vieille {
+  opacity: 0.45 !important;
+}
+.nouvelle.partie {
+  opacity: 0 !important;
+}
+@keyframes arrivee {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* --- La grande annonce --- */
+#annonce {
+  position: absolute;
+  top: 18%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  opacity: 0;
+  transition: opacity 1.4s;
+  pointer-events: none;
+}
+#annonce.visible {
+  opacity: 1;
+}
+#annonce .surtitre {
+  font-family: var(--titre);
+  font-size: 13px;
+  letter-spacing: 0.6em;
+  color: var(--or);
+}
+#annonce h1 {
+  font-family: var(--titre);
+  font-weight: 400;
+  font-size: 58px;
+  letter-spacing: 0.25em;
+  margin: 8px 0 4px;
+  color: var(--or-clair);
+  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.7), 0 0 60px rgba(215, 180, 106, 0.35);
+}
+#annonce p {
+  font-size: 21px;
+  font-style: italic;
+  margin: 0;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.9);
+}
+
+/* --- L'écran titre --- */
+#titre {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: auto;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 35%, rgba(0, 0, 0, 0.45) 100%);
+  transition: opacity 1.8s ease;
+}
+#titre.parti {
+  opacity: 0;
+  pointer-events: none;
+}
+#titre .surtitre {
+  font-family: var(--titre);
+  font-size: 13px;
+  letter-spacing: 0.7em;
+  color: var(--or-clair);
+  opacity: 0;
+  animation: monte 2.5s 0.8s ease forwards;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.8);
+}
+#titre h1 {
+  font-family: var(--titre);
+  font-weight: 400;
+  font-size: clamp(64px, 11vw, 150px);
+  letter-spacing: 0.32em;
+  margin: 10px 0 0 0.32em;
+  color: #fbecc4;
+  text-shadow: 0 4px 40px rgba(0, 0, 0, 0.55), 0 0 80px rgba(255, 210, 140, 0.35);
+  opacity: 0;
+  animation: monte 3.2s 1.4s ease forwards;
+}
+#titre .devise {
+  font-size: 23px;
+  font-style: italic;
+  color: var(--encre);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.9);
+  opacity: 0;
+  animation: monte 2.5s 2.6s ease forwards;
+}
+#titre .choix {
+  margin-top: 46px;
+  display: flex;
+  gap: 18px;
+  opacity: 0;
+  animation: monte 2s 3.6s ease forwards;
+}
+#titre .choix button {
+  pointer-events: auto;
+  font-family: var(--titre);
+  font-size: 14px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--or-clair);
+  background: rgba(15, 10, 6, 0.42);
+  border: 1px solid var(--trait);
+  padding: 13px 26px 12px 30px;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: background 0.2s, border-color 0.2s, letter-spacing 0.3s;
+}
+#titre .choix button:hover {
+  background: rgba(215, 180, 106, 0.18);
+  border-color: var(--or);
+  letter-spacing: 0.4em;
+}
+#titre .choix button small {
+  display: block;
+  font-family: var(--texte);
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  font-style: italic;
+  color: var(--encre-douce);
+  margin-top: 4px;
+}
+#titre .pied {
+  position: absolute;
+  bottom: 22px;
+  font-size: 15px;
+  font-style: italic;
+  color: var(--encre-douce);
+  opacity: 0;
+  animation: monte 2s 4.4s ease forwards;
+}
+@keyframes monte {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* --- L'aide --- */
+#aide {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 22px 28px;
+  width: 520px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+#aide.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+#aide h2 {
+  font-family: var(--titre);
+  font-weight: 400;
+  letter-spacing: 0.25em;
+  color: var(--or-clair);
+  margin: 0 0 12px;
+  font-size: 18px;
+  text-align: center;
+}
+#aide table {
+  width: 100%;
+  font-size: 15.5px;
+  border-collapse: collapse;
+}
+#aide td {
+  padding: 3px 4px;
+  vertical-align: top;
+}
+#aide td:first-child {
+  font-family: var(--titre);
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  color: var(--or);
+  white-space: nowrap;
+  padding-top: 5px;
+}
+#aide p {
+  font-style: italic;
+  color: var(--encre-douce);
+  font-size: 15px;
+  margin: 12px 0 0;
+  text-align: center;
+}
+kbd {
+  font-family: var(--titre);
+  font-size: 11px;
+  border: 1px solid var(--trait);
+  border-bottom-width: 2px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  color: var(--or-clair);
+}
+#astuce {
+  position: absolute;
+  bottom: 178px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 17px;
+  font-style: italic;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.95), 0 0 20px rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  transition: opacity 0.4s;
+  white-space: nowrap;
+}
+#astuce.visible {
+  opacity: 1;
+}
+#astuce.erreur {
+  color: #ffb9a8;
+}
+#chargement {
+  position: fixed;
+  inset: 0;
+  background: #0b0806;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--titre);
+  letter-spacing: 0.5em;
+  color: var(--or);
+  font-size: 13px;
+  z-index: 20;
+  transition: opacity 1.5s;
+}
+#chargement.parti {
+  opacity: 0;
+  pointer-events: none;
+}
